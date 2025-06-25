@@ -33,13 +33,16 @@ class Internet:
     def conect_network(self)->bool:
         if self.create_network():
             self.verif_conn()
-            for _ in range(10):
-                if self.wifi.isconnected():
-                    return True    
-                sleep(1)
-            raise ConnectionError().
+            try:
+                for _ in range(10):
+                    if self.wifi.isconnected():
+                        return True    
+                    sleep(1)
+                raise ConnectionError()
                 
-        return False
+            except ConnectionError as e:
+                connect_net_error = e.password_error()
+                return connect_net_error
 
 
     def network_scans(self)->list[tuple]:
@@ -72,7 +75,9 @@ class ConfigWifi:
         try:
             with open(file, "r") as j:
                 return ujson.load(j)
-        except Exception:
+        
+        except (OSError, ValueError):
+            print(f"Erro ao ler o arquivo: {file}")
             return None
     
     
@@ -81,17 +86,19 @@ class ConfigWifi:
             ujson.dump(data, j)
                 
     
-    def save_wifi_info(self)->None:
+    def save_wifi_info(self) -> None:
         jsonOppen = self.all_wifis()
         if jsonOppen is None:
             self.whrite_json_wifis("list_wifis.json", [self.data_wifi()])
             return
-        
-        for savedWifi in jsonOppen:
-            if savedWifi["wifi"] != self.wifi_name:
-                jsonOppen.append(self.data_wifi())
-                self.whrite_json_wifis("list_wifis.json", jsonOppen)
 
+        for savedWifi in jsonOppen:
+            if savedWifi["wifi"] == self.wifi_name:
+                return
+
+        jsonOppen.append(self.data_wifi())
+        self.whrite_json_wifis("list_wifis.json", jsonOppen)
+        
     
     def all_wifis(self)->list[dict()] | None:
         wifi_list = self.read_json_wifis('list_wifis.json')
@@ -125,7 +132,7 @@ class MakerConnection:
         return self.socket_
    
        
-    def get_ssid_and_password_json(self)->dict[]:
+    def get_ssid_and_password_json(self)->dict:
         return self.w.data_wifi()
         
 
@@ -143,20 +150,26 @@ class MakerConnection:
         self.w.set_autoreconnection(autoconn)
         
         
-    def make_autoconnection(self)->list[str, str] | bool:
-        autocon = self.w.return_autoconnectio()
+    def make_autoconnection(self)->tuple[str, str] | bool:
+            
+        autocon = self.w.return_autoconnection()
         if autocon:
-            get_wifis_saves = self.all_wifis()
+            get_wifis_saves = self.w.all_wifis()
             available_wifis = self.wifis_scans()
+            
+            if get_wifis_saves is None or not get_wifis_saves or not available_wifis:
+                print("Nenhuma rede salva para tentar conexão automática.")
+                return False
+            
             for wifi in available_wifis:
                 for wifi_save in get_wifis_saves:
-                    if wifi[0].decode() == wifi_save["wifi"]
-                    return wifi_save["wifi"], wifi_save["password]
+                    if wifi[0].decode() == wifi_save["wifi"]:
+                        return wifi_save["wifi"], wifi_save["password"]
                     
         return autocon
         
         
-    def wifis_scans(self)->tuple[]:
+    def wifis_scans(self)->list[tuple]:
         return self.internetServer.network_scans()
        
        
