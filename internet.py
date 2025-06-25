@@ -20,7 +20,7 @@ class Internet:
             self.wifi.active(True)
             return True
             
-        except  Exception:
+        except Exception:
             fatal_error = ErroWLAN()
             return fatal_error.pin_error()
     
@@ -36,7 +36,8 @@ class Internet:
             for _ in range(10):
                 if self.wifi.isconnected():
                     return True    
-                sleep(1)                    
+                sleep(1)
+            raise 
                 
         return False
 
@@ -44,8 +45,7 @@ class Internet:
     def network_scans(self)->list[tuple]:
         wifis_scans = self.wifi.scan()
         return wifis_scans
-
-
+        
 
 class ConfigWifi:
    
