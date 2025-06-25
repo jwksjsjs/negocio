@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurar Wi-Fi Magna Smart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #D6D6D6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      margin-top: 40px;
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 10px auto;
+      max-width: 150px;
+      height: auto;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    select, input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #9E7878;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #664c4c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://static.wixstatic.com/media/b5cc20_45b785b44a6d4121af95644f058d8823~mv2.png/v1/fill/w_110,h_57,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/LOGO_tif.png" 
+         alt="Logo" class="logo" />
+         </br>
+    <h2>Configurar Wi-Fi</h2>
+    <form method="POST" action="/config">
+      <label for="ssid">Rede Wi-Fi:</label>
+      <select name="ssid" id="ssid">
+        %OPTIONS%
+      </select>
+      <label for="password">Senha:</label>
+      <input type="password" name="password" id="password" placeholder="Senha da rede" required>
+      <button type="submit">Conectar</button>
+    </form>
+    </br>
+  </div>
+</body>
+</html>

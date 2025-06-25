@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <style>
+        body { font-family: Arial; text-align: center; padding: 20px; }
+        input[type=text] { width: 80%; padding: 10px; font-size: 16px; }
+        input[type=submit] { padding: 10px 20px; font-size: 16px; margin-top: 10px; }
+        .btn-desconectar { padding: 10px 20px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        .btn-desconectar { background-color: #f44336; color: white; border: none; }
+      </style>
+    </head>
+    <body>
+      <img src="https://static.wixstatic.com/media/b5cc20_45b785b44a6d4121af95644f058d8823~mv2.png/v1/fill/w_110,h_57,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/LOGO_tif.png" alt="Logo">
+      <h2>Interface de Comandos</h2>
+      <form method='POST'>
+        <input type='text' name='comando' placeholder='Digite um comando...'><br>
+        <input type='submit' value='Enviar'>
+      </form>
+      </br>
+      <form method="POST" action="/desconectar">
+        <button type="submit" class="btn-desconectar">Desconectar</button>
+      </form>
+      <h2>Volume</h2>
+      <input type="range" min="0" max="100" value="50" id="slider" oninput="sendVolume(this.value)">
+      <p>Valor: <span id="val">50</span>%</p>
+      <script>
+        function sendVolume(val) {
+          document.getElementById('val').textContent = val;
+          fetch('/volume?value=' + val);
+        }
+      </script>
+    </body>
+    </html>
