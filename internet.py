@@ -1,21 +1,17 @@
 import network as net
-from definicao_dos_pinos import Sockets
 import ujson
 from erros import ErroWLAN
 from time import sleep
-
+from definicao_dos_pinos import Sockets
 
 
 class Internet:  
-
-
     #eu nao quero fazer hierarquia entre internet e cofigWifi já que configWifi é uma classe muito aberta
     #preferi reiniciar o construtor pra manter a independencia entre as duas classes
     def __init__(self, nameNetwork, keyNetwork)->None:
         self._nameNetwork = nameNetwork
         self._keyNetwork = keyNetwork
         self.wifi = None
-
 
        
     def create_network(self)->bool:
@@ -29,22 +25,18 @@ class Internet:
             return fatal_error.pin_error()
     
     
-    def verif_conn(self)->None:
-       
+    def verif_conn(self)->None:       
        if not self.wifi.isconnected():
            self.wifi.connect(self._nameNetwork, self._keyNetwork)
              
        
     def conect_network(self)->bool:
         if self.create_network():
-                self.verif_conn()
-                
-                for _ in range(10):
-                    
-                    if self.wifi.isconnected():
-                        return True
-                        
-                    sleep(1)                    
+            self.verif_conn()
+            for _ in range(10):
+                if self.wifi.isconnected():
+                    return True    
+                sleep(1)                    
                 
         return False
 
@@ -52,7 +44,6 @@ class Internet:
     def network_scans(self)->list[tuple]:
         wifis_scans = self.wifi.scan()
         return wifis_scans
-
 
 
 
@@ -74,14 +65,20 @@ class ConfigWifi:
        
        
     @property
-    def data_wifi(self)->dict[str, str] :
+    def data_wifi(self)->dict[str, str]:
         return {"wifi": self.wifi_name, "password": self.wifi_password}
        
        
-    def save_wifi_info(self)->None:      
-        with open('wifi_login.json', 'w') as j:          
-            ujson.dump(self.data_wifi, j)
-           
+    def save_wifi_info(self)->None:
+        json_oppen = self.all_wifis()
+        
+        for save_wifi in json_oppen:
+            if save_wifi["wifi"] != self.wifi_name:
+                wifi_list.append(self.data_wifi())
+                    
+                with open('wifi_login.json', 'w') as j:       
+                    ujson.dump(wifi_list, j)
+
            
     def change_wifi_info(self)->tuple[str, str] | tuple[None, None]:        
         try:
@@ -91,7 +88,14 @@ class ConfigWifi:
                
         except:
             return None, None  
+            
 
+    def all_wifis(self)->list[dict()]
+        with open('wifi_login.json', 'r') as j:
+            wifi_list = ujson.load(j)
+            return wifi_list
+        
+        
     def make_autoreconnection(self, response)->None:
         with open('autologin.json', "w") as j:
             ujson.dump({"autoconexão": response}, j)
@@ -112,8 +116,7 @@ class MakerConnection:
         self.w = ConfigWifi(self.internetName, self.password)
        
        
-    def begin_socket(self):
-       
+    def begin_socket(self):       
         self.server = Sockets()
         self.socket_ = self.server.config_socket()
         return self.socket_
@@ -134,11 +137,16 @@ class MakerConnection:
        
            
     def set_autoconnection(self, autoconn)->None:
-        self.make_autoreconnection(autoconn)
+        self.w.make_autoreconnection(autoconn)
         
         
     def is_autoconnection()->bool:
-        if self.return_autoconnectio():
+        if self.w.return_autoconnectio():
+            get_wifis_saves = self.get_ssid_and_password_json()[0]
+
+            get_wifis = self.wifis_scans()
+            for wifi in get_wifis:
+                if wifi[0] in self.get_ssid_and_password_json()[0]
         #varrer todos os scans
         #veficiar se existe em existe uma rede salva ,no json de redes salvas, o id do scan
         #se houver, o password salvo no json de redes e o nome da rede serão usados em verif_conn()
