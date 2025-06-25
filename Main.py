@@ -6,7 +6,7 @@ import grafico#funcao em c
 #Classe de intermédio entre o front e o back
 class Main:
    
-    def __init__(self, internetName, password):
+    def __init__(self, internetName=None, password=None):
         self.internetName = internetName
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
@@ -16,7 +16,6 @@ class Main:
        #iniciar o servidor em internet.py    
        
         self.serverSocket = self.serverToken.begin_socket()
-       
         self.severConnection = self.serverToken.begin_connection()
        
        #chamar o módulo web.py
@@ -48,14 +47,18 @@ class Main:
        
     def set_sound(self, sound):
         pass
-        #chamar a funcao c
-       
+        #chamar a funcao c       
        
     def set_grafic(self):
         pass
         #chama o gráfico em c e repassa pra web
        
-
+    def config_autoconnection(self, setAuto):
+        self.set_autoconnection(setAuto)
+        
+    
+    def auto_login(self):
+        return is_autoconnection() #booleano, responsavel por renderizar a pagina inicial caso seja True
 
        
 if __name__ == "__main__":
@@ -69,4 +72,3 @@ if __name__ == "__main__":
         exit() #web.tela_de_erro(
 
 
-    
