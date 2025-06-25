@@ -64,13 +64,6 @@ class ConfigWifi:
         return self._password
 
     
-    def valid_ssid_pass(self, ssid, kyw)->bool:
-        if ssid != None and kyw != None:
-            return True
-        else:
-            return False
-
-    
     def data_wifi(self)->dict[str, str]:
         return {"wifi": self.wifi_name, "password": self.wifi_password}
 
@@ -83,7 +76,7 @@ class ConfigWifi:
             return None
     
     
-    def whrite_json_wifis(self, file, data):
+    def whrite_json_wifis(self, file, data)->None:
         with open(file, 'w') as j:
             ujson.dump(data, j)
                 
@@ -132,11 +125,11 @@ class MakerConnection:
         return self.socket_
    
        
-    def get_ssid_and_password_json(self):
+    def get_ssid_and_password_json(self)->dict[]:
         return self.w.data_wifi()
         
 
-    def begin_connection(self):          
+    def begin_connection(self)->bool:          
         self.internetServer = Internet(self.internetName, self.password)
         self.connection = self.internetServer.connect_network()
         
@@ -163,7 +156,7 @@ class MakerConnection:
         return autocon
         
         
-    def wifis_scans(self):
+    def wifis_scans(self)->tuple[]:
         return self.internetServer.network_scans()
        
        
