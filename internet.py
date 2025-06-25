@@ -47,7 +47,8 @@ class Internet:
     def network_scans(self)->list[tuple]:
         wifis_scans = self.wifi.scan()
         return wifis_scans
-        
+
+
 
 class ConfigWifi:
    
