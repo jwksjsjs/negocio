@@ -64,39 +64,43 @@ class ConfigWifi:
         return self._password
        
        
-    @property
     def data_wifi(self)->dict[str, str]:
         return {"wifi": self.wifi_name, "password": self.wifi_password}
-       
-       
+
+    
+    def read_json_wifis(self, file):
+        try:
+            with open(file, "r") as j:
+                json_read = ujson.load(j)      
+        except Exception:
+            pass
+
+    
+    def whrite_json_wifis(self, file, data):    
+        if file["wifi"] != None and file["password"] != None:
+            with open('wifi_login.json', 'w') as j:
+                ujson.dump([data], j)
+           
+    
     def save_wifi_info(self)->None:
         jsonOppen = self.all_wifis()
+        if jsonOppen is None:
+            self.whrite_json_wifis(self.data_wifi)
+            return
+        
         for savedWifi in jsonOppen:
             if savedWifi["wifi"] != self.wifi_name:
                 jsonOppen.append(self.data_wifi)
-                    
-                with open('wifi_login.json', 'w') as j:       
-                    ujson.dump(jsonOppen, j)
+                self.whrite_json_wifis(jsonOppen)
 
-           
-    def change_wifi_info(self)->tuple[str, str] | tuple[None, None]:        
-        try:
-            with open('wifi_login.json', 'r') as j:          
-                data = ujson.load(j)
-                return data["wifi"], data["password"]
-               
-        except:
-            return None, None  
-            
+    
+    def all_wifis(self)->list[dict()] | None:
+        wifi_list = self.read_json_wifis('wifis_saves.json')
+        return wifi_list
 
-    def all_wifis(self)->list[dict()]
-        with open('wifi_login.json', 'r') as j:
-            wifi_list = ujson.load(j)
-            return wifi_list
-        
-        
+    
     def set_autoreconnection(self, response)->None:
-        with open('autologin.json', "w") as j:
+        with open('autologin.json', "w") as 
             ujson.dump({"autoconexão": response}, j)
         
         
@@ -111,6 +115,7 @@ class MakerConnection:
    
     def __init__(self, internetName:str, password)->None:
         self.internetName = internetName
+        #nao acho que crip é necessário 
         self.password = password
         self.w = ConfigWifi(self.internetName, self.password)
        
@@ -122,7 +127,7 @@ class MakerConnection:
    
        
     def get_ssid_and_password_json(self):
-        return self.w.change_wifi_info()
+        return self.w.data_wifi()
         
 
     def begin_connection(self):          
