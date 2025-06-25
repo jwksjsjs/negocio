@@ -6,8 +6,7 @@ from definicao_dos_pinos import Sockets
 
 
 class Internet:  
-    #eu nao quero fazer hierarquia entre internet e cofigWifi já que configWifi é uma classe muito aberta
-    #preferi reiniciar o construtor pra manter a independencia entre as duas classes
+    
     def __init__(self, nameNetwork, keyNetwork)->None:
         self._nameNetwork = nameNetwork
         self._keyNetwork = keyNetwork
