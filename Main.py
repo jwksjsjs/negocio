@@ -1,6 +1,6 @@
 from internet import MakerConnection
 import web
-import grafico#funcao em c
+import grafico#funcao em c++
 
 
 #Classe de intermédio entre o front e o back
@@ -10,12 +10,12 @@ class Main:
         self.internetName = internetName
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
-       
+        self.serverSocket = self.serverToken.begin_socket()
        
     def run_app(self):    
        #iniciar o servidor em internet.py    
        
-        self.serverSocket = self.serverToken.begin_socket()
+        
         self.severConnection = self.serverToken.begin_connection()
        
        #chamar o módulo web.py
@@ -47,19 +47,19 @@ class Main:
        
     def set_sound(self, sound):
         pass
-        #chamar a funcao c       
+        #chamar a funcao c++
        
     def set_grafic(self):
         pass
-        #chama o gráfico em c e repassa pra web
+        #chama o gráfico em c++ e repassa pra web
        
     def config_autoconnection(self, setAuto):
-        self.set_autoconnection(setAuto)
+        self.serverToken.is_autoconnection(setAuto)
         
     
     def auto_login(self):
-        return is_autoconnection() #booleano, responsavel por renderizar a pagina inicial caso seja True
-
+        return self.serverToken.make_autoconnection()
+        #boolenao True or False, redireciona a home_page caso True
        
 if __name__ == "__main__":
    
