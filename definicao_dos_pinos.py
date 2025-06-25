@@ -1,7 +1,7 @@
 from machine import Pin, Timer, I2C
 import socket as sck
 
-
+#Eu nao tô mais gostando desse código eu acho que vou refazer tudo
 
 
 #MÓDULO QUASE EXCLUSUVO DO MÓDULO C++, TODAS ESSAS MATERIALIZAÇÕES SÃO CRIADAS PRA MANIPULAÇÃO DO CÓDIO EM C++,
