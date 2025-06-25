@@ -3,7 +3,7 @@ import web
 import grafico#funcao em c++
 
 
-#Classe de intermédio entre o front e o back
+#Classe de intermédio entre o front e o back, tem que ser equeno, vai so chamar as coisas
 class Main:
    
     def __init__(self, internetName=None, password=None):
@@ -16,23 +16,6 @@ class Main:
        #iniciar o servidor em internet.py
         self.severConnection = self.serverToken.begin_connection()
        
-       #chamar o módulo web.py
-       #runWeb = web.home_page
-       #runWeb()
-             
-       #pegar as informacoes de rede
-       #a funcao set_internet_user vai ser chamada pelo módulo web
-       
-       
-  #mandar as informações de rede pra interne.py  
-       #Server.beggin_connection(internetName, password)
-       #vai ser chamada pela web
-       
-       #pegar as informacoes de web.py de volume         #chamar o módulo .c
-       #mandar as informções de volume codigo pro módulo .c
-       
-       #pegar o gráfico gerado pelo módulo em c
-       #enviar pra web o gráfico vindo de c
     def conector(self):
         serverAcception, addrServerAcception = self.serverToken.socket_accept()
         return serverAcception, addrServerAcception
@@ -56,8 +39,15 @@ class Main:
         
     
     def auto_login(self):
+
         self.internetName, self.password = self.serverToken.make_autoconnection()
+        #usa if pra verificar False, se False retorna pra uma pagina html de erro
+        #ou avisando que nao conseguiu se conectar, tem que ver como diferenciar
+       
         self.serverToken = MakerConenction(self.internetName, self.password)
+       #seta a conexão automática, mas tem que impedir que isso ocorra caso a
+       #internet ja estaja conetada
+       #web.py vai chamar isso aqui e fazer o resto com a resposta
        
        
 if __name__ == "__main__":
