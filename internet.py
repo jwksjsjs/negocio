@@ -1,6 +1,6 @@
 import network as net
 import ujson
-from erros import ErroWLAN
+from erros import ErroWLAN, ConnectionError
 from time import sleep
 from definicao_dos_pinos import Sockets
 
@@ -37,7 +37,7 @@ class Internet:
                 if self.wifi.isconnected():
                     return True    
                 sleep(1)
-            raise 
+            raise ConnectionError().
                 
         return False
 
