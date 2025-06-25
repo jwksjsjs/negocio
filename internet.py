@@ -70,14 +70,13 @@ class ConfigWifi:
        
        
     def save_wifi_info(self)->None:
-        json_oppen = self.all_wifis()
-        
-        for save_wifi in json_oppen:
-            if save_wifi["wifi"] != self.wifi_name:
-                wifi_list.append(self.data_wifi())
+        jsonOppen = self.all_wifis()
+        for savedWifi in jsonOppen:
+            if savedWifi["wifi"] != self.wifi_name:
+                jsonOppen.append(self.data_wifi)
                     
                 with open('wifi_login.json', 'w') as j:       
-                    ujson.dump(wifi_list, j)
+                    ujson.dump(jsonOppen, j)
 
            
     def change_wifi_info(self)->tuple[str, str] | tuple[None, None]:        
