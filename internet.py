@@ -96,7 +96,7 @@ class ConfigWifi:
             return wifi_list
         
         
-    def make_autoreconnection(self, response)->None:
+    def set_autoreconnection(self, response)->None:
         with open('autologin.json', "w") as j:
             ujson.dump({"autoconexão": response}, j)
         
@@ -136,17 +136,19 @@ class MakerConnection:
         return self.connection
        
            
-    def set_autoconnection(self, autoconn)->None:
+    def define_autoconnection(self, autoconn)->None:
         self.w.make_autoreconnection(autoconn)
         
         
-    def is_autoconnection()->bool:
+    def make_autoconnection()->list[str, str] | bool:
         if self.w.return_autoconnectio():
-            get_wifis_saves = self.get_ssid_and_password_json()[0]
-
-            get_wifis = self.wifis_scans()
-            for wifi in get_wifis:
-                if wifi[0] in self.get_ssid_and_password_json()[0]
+            get_wifis_saves = self.all_wifis()
+            available_wifis = self.wifis_scans()
+            for wifi in available_wifis:
+                if wifi[0] == self.get_ssid_and_password_json()[0]:
+                    return wifi[0], wifi[1]
+                    
+        return False
         #varrer todos os scans
         #veficiar se existe em existe uma rede salva ,no json de redes salvas, o id do scan
         #se houver, o password salvo no json de redes e o nome da rede serão usados em verif_conn()
