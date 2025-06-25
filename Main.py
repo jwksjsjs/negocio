@@ -13,9 +13,7 @@ class Main:
         self.serverSocket = self.serverToken.begin_socket()
        
     def run_app(self):    
-       #iniciar o servidor em internet.py    
-       
-        
+       #iniciar o servidor em internet.py
         self.severConnection = self.serverToken.begin_connection()
        
        #chamar o módulo web.py
@@ -58,8 +56,9 @@ class Main:
         
     
     def auto_login(self):
-        return self.serverToken.make_autoconnection()
-        #boolenao True or False, redireciona a home_page caso True
+        self.internetName, self.password = self.serverToken.make_autoconnection()
+        self.serverToken = MakerConenction(self.internetName, self.password)
+       
        
 if __name__ == "__main__":
    
