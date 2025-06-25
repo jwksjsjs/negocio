@@ -1,5 +1,5 @@
 
-
+#Tudo vai ser bem simpleszinho
 #Classe para erros inexperados de tentativa de iniciar o WLAN
 class WLAMErroException):
     
