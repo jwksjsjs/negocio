@@ -4,7 +4,7 @@ from erros import ErroWLAN, ConnectionError
 from time import sleep
 from definicao_dos_pinos import Sockets
 
-
+#Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
 class Internet:  
     
     def __init__(self, nameNetwork, keyNetwork)->None:
