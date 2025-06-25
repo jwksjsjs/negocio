@@ -62,8 +62,15 @@ class ConfigWifi:
     @property
     def wifi_password(self)->str:
         return self._password
-       
-       
+
+    
+    def valid_ssid_pass(self, ssid, kyw)->bool:
+        if ssid != None and kyw != None:
+            return True
+        else:
+            return False
+
+    
     def data_wifi(self)->dict[str, str]:
         return {"wifi": self.wifi_name, "password": self.wifi_password}
 
@@ -71,36 +78,35 @@ class ConfigWifi:
     def read_json_wifis(self, file):
         try:
             with open(file, "r") as j:
-                json_read = ujson.load(j)      
+                return ujson.load(j)
         except Exception:
-            pass
-
+            return None
     
-    def whrite_json_wifis(self, file, data):    
-        if file["wifi"] != None and file["password"] != None:
-            with open('wifi_login.json', 'w') as j:
-                ujson.dump([data], j)
-           
+    
+    def whrite_json_wifis(self, file, data):
+        with open(file, 'w') as j:
+            ujson.dump(data, j)
+                
     
     def save_wifi_info(self)->None:
         jsonOppen = self.all_wifis()
         if jsonOppen is None:
-            self.whrite_json_wifis(self.data_wifi)
+            self.whrite_json_wifis("list_wifis.json", [self.data_wifi()])
             return
         
         for savedWifi in jsonOppen:
             if savedWifi["wifi"] != self.wifi_name:
-                jsonOppen.append(self.data_wifi)
-                self.whrite_json_wifis(jsonOppen)
+                jsonOppen.append(self.data_wifi())
+                self.whrite_json_wifis("list_wifis.json", jsonOppen)
 
     
     def all_wifis(self)->list[dict()] | None:
-        wifi_list = self.read_json_wifis('wifis_saves.json')
+        wifi_list = self.read_json_wifis('list_wifis.json')
         return wifi_list
 
     
     def set_autoreconnection(self, response)->None:
-        with open('autologin.json', "w") as 
+        with open('autologin.json', "w") as j:
             ujson.dump({"autoconexão": response}, j)
         
         
@@ -141,25 +147,20 @@ class MakerConnection:
        
            
     def define_autoconnection(self, autoconn)->None:
-        self.w.make_autoreconnection(autoconn)
+        self.w.set_autoreconnection(autoconn)
         
         
-    def make_autoconnection()->list[str, str] | bool:
-        if self.w.return_autoconnectio():
+    def make_autoconnection(self)->list[str, str] | bool:
+        autocon = self.w.return_autoconnectio()
+        if autocon:
             get_wifis_saves = self.all_wifis()
             available_wifis = self.wifis_scans()
             for wifi in available_wifis:
-                if wifi[0] == self.get_ssid_and_password_json()[0]:
-                    return wifi[0], wifi[1]
+                for wifi_save in get_wifis_saves:
+                    if wifi[0].decode() == wifi_save["wifi"]
+                    return wifi_save["wifi"], wifi_save["password]
                     
-        return False
-        #varrer todos os scans
-        #veficiar se existe em existe uma rede salva ,no json de redes salvas, o id do scan
-        #se houver, o password salvo no json de redes e o nome da rede serão usados em verif_conn()
-        #a senha e id serao passados para verif_conn
-        #isso deve acontecer apenas se ainda nao estiver cknectado a outra ou a mesma rede
-        #implementar de maneira que nao entre em conflito com begin connection
-            
+        return autocon
         
         
     def wifis_scans(self):
