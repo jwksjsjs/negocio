@@ -5,7 +5,7 @@ from time import sleep
 from definicao_dos_pinos import Sockets
 
 #Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
-class Internet:  
+class SettingsInternet:  
     
     def __init__(self, nameNetwork, keyNetwork)->None:
         self._nameNetwork = nameNetwork
@@ -13,7 +13,7 @@ class Internet:
         self.wifi = None
 
        
-    def create_network(self)->bool:
+    def activate_network(self)->bool:
         try:
             self.wifi = net.WLAN(net.STA_IF)
             self.wifi.active(True)
@@ -29,8 +29,8 @@ class Internet:
            self.wifi.connect(self._nameNetwork, self._keyNetwork)
              
        
-    def conect_network(self)->bool:
-        if self.create_network():
+    def connect_network(self)->bool:
+        if self.activate_network():
             self.verif_conn()
             try:
                 for _ in range(10):
@@ -44,31 +44,21 @@ class Internet:
                 return connect_net_error
 
 
-    def network_scans(self)->list[tuple]:
+    def network_scans_around(self)->list[tuple]:
         wifis_scans = self.wifi.scan()
         return wifis_scans
 
 
 
-class ConfigWifi:
+class ManagerWifiInfor:
    
     def __init__(self, wifiName, password)->None:
         self._wifiName = wifiName
         self._password = password
-       
-       
-    @property
-    def wifi_name(self)->str:
-        return self._wifiName
-       
-       
-    @property
-    def wifi_password(self)->str:
-        return self._password
 
     
     def data_wifi(self)->dict[str, str]:
-        return {"wifi": self.wifi_name, "password": self.wifi_password}
+        return {"wifi": self._wifi_name, "password": self._wifi_password}
 
     
     def read_json_wifis(self, file):
@@ -93,7 +83,7 @@ class ConfigWifi:
             return
 
         for savedWifi in jsonOppen:
-            if savedWifi["wifi"] == self.wifi_name:
+            if savedWifi["wifi"] == self._wifi_name:
                 return
 
         jsonOppen.append(self.data_wifi())
@@ -105,12 +95,12 @@ class ConfigWifi:
         return wifi_list
 
     
-    def set_autoreconnection(self, response)->None:
+    def set_selfconnection(self, response)->None:
         with open('autologin.json', "w") as j:
             ujson.dump({"autoconexão": response}, j)
         
         
-    def return_autoconnection(self)->bool:
+    def return_selfconnection(self)->bool:
         with open('autologin.json', "r") as j:
             isauto = ujson.load(j)
             return isauto["autoconexão"]
@@ -123,7 +113,7 @@ class MakerConnection:
         self.internetName = internetName
         #nao acho que crip é necessário 
         self.password = password
-        self.w = ConfigWifi(self.internetName, self.password)
+        self.w = ManagerWifiInfor(self.internetName, self.password)
        
        
     def begin_socket(self):       
@@ -137,7 +127,7 @@ class MakerConnection:
         
 
     def begin_connection(self)->bool:          
-        self.internetServer = Internet(self.internetName, self.password)
+        self.internetServer = SettingsInternet(self.internetName, self.password)
         self.connection = self.internetServer.connect_network()
         
         if self.connection:
@@ -146,13 +136,13 @@ class MakerConnection:
         return self.connection
        
            
-    def define_autoconnection(self, autoconn)->None:
-        self.w.set_autoreconnection(autoconn)
+    def define_selfconnection(self, autoconn)->None:
+        self.w.set_selfconnection(autoconn)
         
         
-    def make_autoconnection(self)->tuple[str, str] | bool:
+    def make_selfconnection(self)->tuple[str, str] | bool:
             
-        autocon = self.w.return_autoconnection()
+        autocon = self.w.return_selfconnection()
         if autocon:
             get_wifis_saves = self.w.all_wifis()
             available_wifis = self.wifis_scans()
@@ -170,7 +160,7 @@ class MakerConnection:
         
         
     def wifis_scans(self)->list[tuple]:
-        return self.internetServer.network_scans()
+        return self.internetServer.network_scans_around()
        
        
     def socket_accept(self):
