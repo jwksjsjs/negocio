@@ -35,12 +35,12 @@ class Main:
         #chama o gráfico em c++ e repassa pra web
        
     def config_autoconnection(self, setAuto):
-        self.serverToken.is_autoconnection(setAuto)
+        self.serverToken.is_selfconnection(setAuto)
         
     
     def auto_login(self):
 
-        self.internetName, self.password = self.serverToken.make_autoconnection()
+        self.internetName, self.password = self.serverToken.make_selfconnection()
         #usa if pra verificar False, se False retorna pra uma pagina html de erro
         #ou avisando que nao conseguiu se conectar, tem que ver como diferenciar
        
