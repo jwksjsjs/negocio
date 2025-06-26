@@ -17,7 +17,7 @@ class Main:
         if 
         self.severConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
-        clientSever = {"Id": internetName,
+        clientSever = {"Id": self.internetName,
                        "Servidor": self.connecteIn[0]}
        
         return clientServer
