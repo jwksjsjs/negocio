@@ -14,24 +14,20 @@ class Main:
        
     def run_app(self):    
        #iniciar o servidor em internet.py
+        if 
         self.severConnection = self.serverToken.begin_connection()
-        self.connectedIn = self.connection_infor()
+        self.connectedIn = self.serverToken.socket_accept()
         clientSever = {"Id": internetName,
                        "Servidor": self.connecteIn[0]}
        
         return clientServer
        
        
-    def connection_infor(self):
-        serverAcception, addrServerAcception = self.serverToken.socket_accept()
-        return serverAcception, addrServerAcception
-       
-       
     def wifis_around(self):
        #isso vai ser uma lista ou tupla de um monte de redes, tem que
-       #pegar uma a uma
-        wifiScans = self.serverToken.wifis_scans()
-        return wifiScans
+        wifisAround = self.serverToken.wifis_scans()
+        wifis = [{"Rede": Wifi[0].decode(), "Potência do sinal": Wifi[3]} for Wifi in wifisAroud]
+        return wifis
        
        
     def set_sound(self, sound):
