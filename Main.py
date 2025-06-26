@@ -15,15 +15,19 @@ class Main:
     def run_app(self):    
        #iniciar o servidor em internet.py
         self.severConnection = self.serverToken.begin_connection()
-        self.connected_in = self.connection_infor()
+        self.connectedIn = self.connection_infor()
+        clientSever = {"Id": internetName,
+                       "Servidor": self.connecteIn[0]}
+       
+        return clientServer
+       
        
     def connection_infor(self):
         serverAcception, addrServerAcception = self.serverToken.socket_accept()
         return serverAcception, addrServerAcception
        
        
-    def wifis_around(self):          
-        
+    def wifis_around(self):
        #isso vai ser uma lista ou tupla de um monte de redes, tem que
        #pegar uma a uma
         wifiScans = self.serverToken.wifis_scans()
