@@ -15,8 +15,9 @@ class Main:
     def run_app(self):    
        #iniciar o servidor em internet.py
         self.severConnection = self.serverToken.begin_connection()
+        self.connected_in = self.connection_infor()
        
-    def conector(self):
+    def connection_infor(self):
         serverAcception, addrServerAcception = self.serverToken.socket_accept()
         return serverAcception, addrServerAcception
        
@@ -49,7 +50,7 @@ class Main:
         if datasToSelfConn:
             self.internetName, self.password = datasToSelfConn[0], datasToSelfConn[1]
             self.serverToken = MakerConenction(self.internetName, self.password)
-            return True
+            self.run_app()
 
 
         return False
