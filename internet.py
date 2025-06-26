@@ -7,7 +7,7 @@ from definicao_dos_pinos import Sockets
 #Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
 class SettingsInternet:  
     
-    def __init__(self, nameNetwork, keyNetwork)->None:
+    def __init__(self, nameNetwork=None, keyNetwork=None)->None:
         self._nameNetwork = nameNetwork
         self._keyNetwork = keyNetwork
         self.wifi = None
