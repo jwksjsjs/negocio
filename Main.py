@@ -2,7 +2,7 @@ from internet import MakerConnection
 import web
 import grafico#funcao em c++
 
-
+#nao sei como tá a identificação já que nao tem tab disponível
 #Classe de intermédio entre o front e o back, tem que ser equeno, vai so chamar as coisas
 class Main:
    
@@ -22,6 +22,9 @@ class Main:
        
        
     def wifis_around(self):          
+        
+       #isso vai ser uma lista ou tupla de um monte de redes, tem que
+       #pegar uma a uma
         wifiScans = self.serverToken.wifis_scans()
         return wifiScans
        
@@ -34,30 +37,31 @@ class Main:
         pass
         #chama o gráfico em c++ e repassa pra web
        
-    def config_autoconnection(self, setAuto):
-        self.serverToken.is_selfconnection(setAuto)
+    def config_autoconnection(self, setSelfConn):
+        self.serverToken.is_selfconnection(setSelfConn)
         
     
     def auto_login(self):
-
-        self.internetName, self.password = self.serverToken.make_selfconnection()
+        
+        datasToSelfConn= self.serverToken.make_selfconnection()
         #usa if pra verificar False, se False retorna pra uma pagina html de erro
         #ou avisando que nao conseguiu se conectar, tem que ver como diferenciar
-       
-        self.serverToken = MakerConenction(self.internetName, self.password)
+        if datasToSelfConn:
+            self.internetName, self.password = datasToSelfConn[0], datasToSelfConn[1]
+            self.serverToken = MakerConenction(self.internetName, self.password)
+            return True
+
+
+        return False
        #seta a conexão automática, mas tem que impedir que isso ocorra caso a
        #internet ja estaja conetada
        #web.py vai chamar isso aqui e fazer o resto com a resposta
        
        
 if __name__ == "__main__":
-   
     try:
-        runner = main()
-        runner.run_server()
-       
-       
+        runner = main()   
     except:
-        exit() #web.tela_de_erro(
+        return 0
 
 
