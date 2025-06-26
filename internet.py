@@ -120,10 +120,6 @@ class MakerConnection:
         self.server = Sockets()
         self.socket_ = self.server.config_socket()
         return self.socket_
-   
-       
-    def get_ssid_and_password_json(self)->dict:
-        return self.w.data_wifi()
         
 
     def begin_connection(self)->bool:          
