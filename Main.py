@@ -1,4 +1,4 @@
-from internet import MakerConnection
+from internet import MakerConnection, SettingsInternet
 import web
 import grafico#funcao em c++
 
