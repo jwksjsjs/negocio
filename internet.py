@@ -44,9 +44,9 @@ class SettingsInternet:
                 return connect_net_error
 
 
-    def network_scans_around(self)->list[tuple]:
+    def network_scans_around(self)->list[tuple] | None:
         wifis_scans = self.wifi.scan()
-        return wifis_scans
+        return wifis_scans if wifi_scans else None
 
 
 
