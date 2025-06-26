@@ -160,7 +160,8 @@ class MakerConnection:
         
         
     def wifis_scans(self)->list[tuple]:
-        return self.internetServer.network_scans_around()
+        justScan = SettingsInternet()
+        return justScan.network_scans_around()
        
        
     def socket_accept(self):
