@@ -21,8 +21,8 @@ class Main:
         return serverAcception, addrServerAcception
        
        
-    def wifis_scans(self):          
-        wifiScans = self.serverToken.get_scans()
+    def wifis_around(self):          
+        wifiScans = self.serverToken.wifis_scans()
         return wifiScans
        
        
