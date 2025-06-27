@@ -1,4 +1,5 @@
-from machine import Pin, Timer, I2C
+from machine import Pin
+from time import sleep
 import socket as sck
 
 #Eu nao tô mais gostando desse código eu acho que vou refazer tudo
@@ -6,86 +7,70 @@ import socket as sck
 
 #MÓDULO QUASE EXCLUSUVO DO MÓDULO C++, TODAS ESSAS MATERIALIZAÇÕES SÃO CRIADAS PRA MANIPULAÇÃO DO CÓDIO EM C++,
 #COM EXCESSÃO DE SOCKETS QUE TAMBÉM SERÁ USADA POR INTERNET.PY
-class Pins:
-   
-    PIN_SDA = 21
-    PIN_SCL = 22
-    PIN_RESET = 13
-    STATUS_PIN = 2
-     
-    @property
-    def pin_sda(self)->int:
-        return self.PIN_SDA
-
-
-    @property
-    def pin_scl(self)->int:
-        return self.PIN_SCL
-
-
-    @property
-    def pin_reset(self)->int:
-        return self.PIN_RESET
-
-
-    @property
-    def led_status(self)->int:
-        return self.STATUS_PIN
-
-
-   
-
-
 class PinReset(Pins):
-   
+    PIN_RESET = 13
     def __init__(self)->None:
-        super().__init__()
-        self._reset_button = Pin(self.pin_reset, Pin.IN, Pin.PULL_UP)
-
+        self._reset_button = Pin(PinReset.PIN_RESET, Pin.IN, Pin.PULL_UP)
 
     @property
     def reset_button(self)->Pin:
-        return self._reset_button
-       
+        return self._reset_button   
        
     def __str__(self)->str:
         return str(self.reset_button)
                
                
                
-class PinLed(Pins):
-       
+class PinLed:
+   
+    STATUS_PIN_1 = 2
+    #STATUS_PIN_2 = None
     def __init__(self)->None:
-        super().__init__()
-        self.ledStatus = Pin(self.led_status, Pin.OUT)      
-       
+        self.LED = Pin(PinLed.STATUS_PIN, Pin.OUT)
+   
     @property
     def led(self)->Pin:
-        return self.ledStatus
- 
-   
+        return self.LED
+
+    def led_on(self)->None:
+        self.led.on()
+        sleep(1.5)
+       
+    def led_off(self)->None:
+        self.led.off()
+        sleep(1.5)
+
+    def loop_pin(self, arg:bool = False)->None:
+       #nao vai ser desligado aqui
+        while arg:
+            self.led_on()
+            self.led_off()
+           
+        return 
+                   
     def __str__(self)->str:
         return str(self.led)
+
+
  
- 
- 
-class BarramentI2C(Pins):
+class BusI2C(Pins):
    
-    BARRAMENT_1_I2C = 0
-    BARRAMENT_2_I2C = None
+    BUS_I2C = 0
+    PIN_SCL = 22
+    PIN_SDA = 21
    
     def __init__(self)->None:
         super().__init__()
-        self._i2c = I2C(BarramentI2C.BARRAMENT_1_I2C, scl = Pin(self.pin_scl), sda = Pin(self.pin_sda))
+        self.busI2C = I2C(BusI2C.BUS_I2C, scl = Pin(BusI2C.PIN_SCL), sda = Pin(BusI2C.PIN_SDA))
        
        
     @property
-    def barrament_i2c(self)->I2C:
-        return self._i2c
+    def bus_i2c(self)->I2C:
+        return self.busI2C
    
    
     def __str__(self)->str:
-        return str(self.barrament_i2c)
+        return str(self.busI2C)
  
      
      
