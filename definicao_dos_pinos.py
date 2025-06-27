@@ -18,6 +18,7 @@ class PinReset(Pins):
 class PinLed:
    
     STATUS_PIN_1 = 2
+    WAIT = 1.5
     #STATUS_PIN_2 = None
     def __init__(self)->None:
         self.LED = Pin(PinLed.STATUS_PIN, Pin.OUT)
@@ -28,11 +29,11 @@ class PinLed:
 
     def led_on(self)->None:
         self.led.on()
-        sleep(1.5)
+        sleep(WAIT)
        
     def led_off(self)->None:
         self.led.off()
-        sleep(1.5)
+        sleep(WAIT)
 
     def loop_pin(self, arg:bool = False)->None:
        #nao vai ser desligado aqui
