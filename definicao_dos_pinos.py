@@ -52,27 +52,13 @@ class PinLed:
         return str(self.led)
 
 
- 
+#vai pro c++
 class BusI2C(Pins):
    
     BUS_I2C = 0
     PIN_SCL = 22
-    PIN_SDA = 21
-   
-    def __init__(self)->None:
-        super().__init__()
-        self.busI2C = I2C(BusI2C.BUS_I2C, scl = Pin(BusI2C.PIN_SCL), sda = Pin(BusI2C.PIN_SDA))
-       
-       
-    @property
-    def bus_i2c(self)->I2C:
-        return self.busI2C
-   
-   
-    def __str__(self)->str:
-        return str(self.busI2C)
- 
-     
+    PIN_SDA = 211
+    
      
 class Sockets:
    
