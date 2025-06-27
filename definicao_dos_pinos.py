@@ -2,11 +2,6 @@ from machine import Pin
 from time import sleep
 import socket as sck
 
-#Eu nao tô mais gostando desse código eu acho que vou refazer tudo
-
-
-#MÓDULO QUASE EXCLUSUVO DO MÓDULO C++, TODAS ESSAS MATERIALIZAÇÕES SÃO CRIADAS PRA MANIPULAÇÃO DO CÓDIO EM C++,
-#COM EXCESSÃO DE SOCKETS QUE TAMBÉM SERÁ USADA POR INTERNET.PY
 class PinReset(Pins):
     PIN_RESET = 13
     def __init__(self)->None:
@@ -18,7 +13,6 @@ class PinReset(Pins):
        
     def __str__(self)->str:
         return str(self.reset_button)
-               
                
                
 class PinLed:
@@ -50,15 +44,6 @@ class PinLed:
                    
     def __str__(self)->str:
         return str(self.led)
-
-
-#vai pro c++
-class BusI2C(Pins):
-   
-    BUS_I2C = 0
-    PIN_SCL = 22
-    PIN_SDA = 211
-    
      
 class Sockets:
    
