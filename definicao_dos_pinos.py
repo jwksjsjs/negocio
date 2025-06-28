@@ -1,8 +1,6 @@
 import uasyncio as asyncro
-import socket as sck
 import machine 
 from machine import Pin
-from time import sleep
                
 #============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES=============#              
 class PinLed:
