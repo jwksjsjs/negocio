@@ -1,16 +1,36 @@
+
 from machine import Pin
 from time import sleep
 import socket as sck
 
 class PinReset(Pins):
     PIN_RESET = 13
+    TIMER_RESET = 0
     def __init__(self)->None:
         self._reset_button = Pin(PinReset.PIN_RESET, Pin.IN, Pin.PULL_UP)
 
     @property
     def reset_button(self)->Pin:
-        return self._reset_button   
-       
+        return self._reset_button
+    
+   
+    #FUNÇÃO DE RESET, SE O BOTÃO DE RESET FOR APERTADO DURANTE
+    #2.5 SEGUNDOS ACONTECE O RESET, CASO CONTRÁRIO NADA ACONTECE
+    def press_reset(self)->bool:
+        reset_alert = PinLed()
+        while self._reset_button.value() == 0:
+            time.sleep(0.5)
+            reset_alert.loop_led(True)
+            TIMER_RESET += 1
+            if TIMER_RESET == 5:
+                machine.reset()
+                return True
+                
+        reset_alert.loop_led(False)                     
+        return False
+
+
+
     def __str__(self)->str:
         return str(self.reset_button)
                
@@ -18,7 +38,7 @@ class PinReset(Pins):
 class PinLed:
    
     STATUS_PIN_1 = 2
-    WAIT = 1.5
+    WAIT = 0.5
     #STATUS_PIN_2 = None
     def __init__(self)->None:
         self.LED = Pin(PinLed.STATUS_PIN, Pin.OUT)
@@ -35,7 +55,7 @@ class PinLed:
         self.led.off()
         sleep(WAIT)
 
-    def loop_pin(self, arg:bool = False)->None:
+    def loop_led(self, arg:bool = False)->None:
        #nao vai ser desligado aqui
         while arg:
             self.led_on()
