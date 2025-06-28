@@ -13,22 +13,31 @@ class Main:
         self.serverToken = MakerConnection(self.internetName, self.password)
         self.serverSocket = self.serverToken.begin_socket()
         self.reset = PinReset()
-       
-    async def gerated_asycro_defs(self, pagesOn):
-       while True:
-           task_reset = asyncro.create_task(self.reset.check_reset())
-       
-           if pageOn["page"] == "config":
-               task_grafic = asyncro.create_task(self.grafic())
-           if pageResquest == "vol":  
-               task_sound = asyncro.create_task(self.sound_collector())
-       
-    def run_app(self)->dict:
+        self.ip = "0.0.0.0"
+        self.porta = 80
+        
+    async def begin_server(self):
+        await uasyncio.start_server(self.tratar, self.ip, self.porta)
+
+    async def resquests_route(self, reader, writer):
+      
+        linha = await reader.readline()
+        requestPage = line.decode().split(" ")[1]
+        if requestPage == "/":
+           pass
+        
+        requestTypeData = line.decode().split("?")[1]
+        requestData = requestTypeData.split("=")[1]
+        return requestPage, requestTypeData, requestData
+           
+      
+    
+    """def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
         clientServer = {"Id": self.internetName,
                        "Servidor": self.connectedIn[0]}
-        return clientServer
+        return clientServer"""
        
        
     def wifis_around(self)->list[dict]:
