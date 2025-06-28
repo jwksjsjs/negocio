@@ -82,38 +82,3 @@ class PinReset:
     def __str__(self)->str:
         return str(self.reset_button)
 
-
-
-class Sockets:
-   
-    IP_CONECTION = "0.0.0.0"
-    PIN_HTTP = 80
-    SOCKET_LISTEN = 1
-   
-    def __init__(self)->None:
-        self.socket_ = self.config_socket()
-       
-           
-    def config_addr(self)->tuple:
-        addr = sck.getaddrinfo(Sockets.IP_CONECTION, Sockets.PIN_HTTP)[0][-1]
-        return addr
-           
-   
-    def config_socket(self)->sck.socket:    
-        self.socketAddr = self.config_addr()
-        socket_ = sck.socket()
-        socket_.bind(self.socketAddr)
-        socket_.listen(Sockets.SOCKET_LISTEN)    
-        return socket_
-   
-           
-    def socket_accept(self)->tuple:
-        conn, addr = self.socket_.accept()  
-        return conn, addr
-       
-       
-    def __str__(self)->str:
-        return str(self.socket_)
-
-
-
