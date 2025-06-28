@@ -30,7 +30,6 @@ class PinLed:
             await self.led_on()
             await self.led_off()
            
-                   
     def __str__(self)->str:
         return str(self.led)
 
@@ -72,7 +71,14 @@ class PinReset:
     
         return reset
 
-    
+    async def check_reset(self):
+        check = False
+        while not check:
+            check = self.press_reset()
+            await asyncro.sleep(0.5)
+          
+        return check
+  
     def __str__(self)->str:
         return str(self.reset_button)
 
