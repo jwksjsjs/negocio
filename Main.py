@@ -1,4 +1,5 @@
-from internet import MakerConnection, SettingsInternet
+from internet import MakerConnection
+from defspins import PinReset
 import web
 import grafico#funcao em c++
 import uasyncio as asyncro
@@ -11,19 +12,18 @@ class Main:
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
         self.serverSocket = self.serverToken.begin_socket()
-        self.reset = Pin_reset()
-
-    def asyncro_bus(self):
-        asyncro.run(self.check_real_defs())
-
-   
-    async def check_real_defs(self)->dict:
-        while True:
-            asyncro.create_task(self.reset.check_reset())
-            asyncro.create_task(self.grafic.check_grafic())
-            asyncro.create_task(self.sound.check_sound())
-         
-    def run_app(self):
+        self.reset = PinReset()
+       
+    async def gerated_asycro_defs(self, pagesOn):
+       while True:
+           task_reset = asyncro.create_task(self.reset.check_reset())
+       
+           if pageOn["page"] == "config":
+               task_grafic = asyncro.create_task(self.grafic())
+           if pageResquest == "vol":  
+               task_sound = asyncro.create_task(self.sound_collector())
+       
+    def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
         clientServer = {"Id": self.internetName,
@@ -35,16 +35,8 @@ class Main:
         wifisAround = self.serverToken.wifis_scans()
         wifis = [{"Rede": _wifi_[0].decode(), "Potência do sinal": _wifi_[3]} for _wifi_ in wifisAround]
         return wifis
-       
-       
-    def set_sound(self, sound:int)->None:
-        pass
-        #chamar a funcao c++
-       
-    def set_grafic(self):
-        pass
-        #chama o gráfico em c++ e repassa pra web
-       
+
+   
     def config_autoconnection(self, setSelfConn:bool=False)->None:
         self.serverToken.is_selfconnection(setSelfConn)
         
