@@ -14,16 +14,20 @@ class Main:
         self.reset = Pin_reset()
 
     def asyncro_bus(self):
-        asyncro.run(run_app())
+        asyncro.run(self.check_real_defs())
 
    
-    async def run_app(self)->dict:
-        self.reset.check_reset()
+    async def check_real_defs(self)->dict:
+        while True:
+            asyncro.create_task(self.reset.check_reset())
+            asyncro.create_task(self.grafic.check_grafic())
+            asyncro.create_task(self.sound.check_sound())
+         
+    def run_app(self):
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
         clientServer = {"Id": self.internetName,
                        "Servidor": self.connectedIn[0]}
-       
         return clientServer
        
        
