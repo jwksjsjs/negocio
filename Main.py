@@ -1,7 +1,7 @@
 from internet import MakerConnection, SettingsInternet
 import web
 import grafico#funcao em c++
-
+import uasyncio as asyncro
 #nao sei como tá a identificação já que nao tem tab disponível
 #Classe de intermédio entre o front e o back, tem que ser equeno, vai so chamar as coisas
 class Main:
@@ -11,8 +11,14 @@ class Main:
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
         self.serverSocket = self.serverToken.begin_socket()
-       
-    def run_app(self)->dict:
+        self.reset = Pin_reset()
+
+    def asyncro_bus(self):
+        asyncro.run(run_app())
+
+   
+    async def run_app(self)->dict:
+        self.reset.check_reset()
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
         clientServer = {"Id": self.internetName,
@@ -44,7 +50,7 @@ class Main:
         if datasToSelfConn:
             self.internetName, self.password = datasToSelfConn[0], datasToSelfConn[1]
             self.serverToken = MakerConnection(self.internetName, self.password)
-            response = self.run_app()
+            response = self.asyncro_bus()
             return response
 
         return False
