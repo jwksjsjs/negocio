@@ -1,36 +1,8 @@
-import uasycio as asyc
+import uasyncio as asyncro
+import socket as sck
+import machine 
 from machine import Pin
 from time import sleep
-import socket as sck
-
-class PinReset(Pins):
-    PIN_RESET = 13
-    TIMER_RESET = 0
-    def __init__(self)->None:
-        self._reset_button = Pin(PinReset.PIN_RESET, Pin.IN, Pin.PULL_UP)
-
-    @property
-    def reset_button(self)->Pin:
-        return self._reset_button    
-   
-    #FUNÇÃO DE RESET, SE O BOTÃO DE RESET FOR APERTADO DURANTE
-    #2.5 SEGUNDOS ACONTECE O RESET, CASO CONTRÁRIO NADA ACONTECE
-    async def press_reset(self)->bool:
-        reset_alert = PinLed()
-        while self._reset_button.value() == 0:
-            time.sleep(0.5)
-            reset_alert.loop_led(True)
-            TIMER_RESET += 1
-            if TIMER_RESET == 5:
-                machine.reset()
-                return True
-                
-        reset_alert.loop_led(False)                     
-        return False
-        
-
-    def __str__(self)->str:
-        return str(self.reset_button)
                
 #============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES=============#              
 class PinLed:
@@ -39,29 +11,70 @@ class PinLed:
     WAIT = 0.5
     
     def __init__(self)->None:
-        self.LED = Pin(PinLed.STATUS_PIN, Pin.OUT)
+        self.LED = Pin(PinLed.STATUS_PIN_1, Pin.OUT)
    
     @property
     def led(self)->Pin:
         return self.LED
 
-    def led_on(self)->None:
+    async def led_on(self)->None:
         self.led.on()
-        sleep(WAIT)
+        await asyncro.sleep(PinLed.WAIT)
        
-    def led_off(self)->None:
+    async def led_off(self)->None:
         self.led.off()
-        sleep(WAIT)
+        await asyncro.sleep(PinLed.WAIT)
 
-    async def loop_led(self, arg:bool = False)->None:
-        while arg:
-            self.led_on()
-            self.led_off()
+    async def loop_led(self)->None:
+        while True:
+            await self.led_on()
+            await self.led_off()
            
-        return 
                    
     def __str__(self)->str:
         return str(self.led)
+
+
+#=============DEFINE O BOTÃO DE RESET E SUAS FUNCIONALIDADES=================#
+class PinReset:
+    
+    PIN_RESET = 13
+    
+    def __init__(self)->None:
+        self._reset_button = Pin(PinReset.PIN_RESET, Pin.IN, Pin.PULL_UP)
+        self.reset_alert = PinLed()
+        self.TIMER_RESET = 0
+        
+    @property
+    def reset_button(self)->Pin:
+        return self._reset_button    
+   
+    #FUNÇÃO DE RESET, SE O BOTÃO DE RESET FOR APERTADO DURANTE
+    #2.5 SEGUNDOS ACONTECE O RESET, CASO CONTRÁRIO NADA ACONTECE
+    async def press_reset(self)->bool:
+        led_task = None
+        reset = False
+        
+        while self._reset_button.value() == 0:
+            
+            if self.TIMER_RESET == 0:
+                led_task = asyncro.create_task(self.reset_alert.loop_led())
+            elif self.TIMER_RESET == 5:
+                reset = True
+                machine.reset()
+                break
+                
+            await asyncro.sleep(0.5)
+            self.TIMER_RESET += 1
+
+        if led_task: led_task.cancel()
+        await self.reset_alert.led_off()
+    
+        return reset
+
+    
+    def __str__(self)->str:
+        return str(self.reset_button)
 
 
 
