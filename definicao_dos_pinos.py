@@ -1,4 +1,4 @@
-
+import uasycio as asyc
 from machine import Pin
 from time import sleep
 import socket as sck
@@ -11,12 +11,11 @@ class PinReset(Pins):
 
     @property
     def reset_button(self)->Pin:
-        return self._reset_button
-    
+        return self._reset_button    
    
     #FUNÇÃO DE RESET, SE O BOTÃO DE RESET FOR APERTADO DURANTE
     #2.5 SEGUNDOS ACONTECE O RESET, CASO CONTRÁRIO NADA ACONTECE
-    def press_reset(self)->bool:
+    async def press_reset(self)->bool:
         reset_alert = PinLed()
         while self._reset_button.value() == 0:
             time.sleep(0.5)
@@ -28,18 +27,17 @@ class PinReset(Pins):
                 
         reset_alert.loop_led(False)                     
         return False
-
-
+        
 
     def __str__(self)->str:
         return str(self.reset_button)
                
-               
+#============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES=============#              
 class PinLed:
-   
+    
     STATUS_PIN_1 = 2
     WAIT = 0.5
-    #STATUS_PIN_2 = None
+    
     def __init__(self)->None:
         self.LED = Pin(PinLed.STATUS_PIN, Pin.OUT)
    
@@ -55,8 +53,7 @@ class PinLed:
         self.led.off()
         sleep(WAIT)
 
-    def loop_led(self, arg:bool = False)->None:
-       #nao vai ser desligado aqui
+    async def loop_led(self, arg:bool = False)->None:
         while arg:
             self.led_on()
             self.led_off()
@@ -65,7 +62,9 @@ class PinLed:
                    
     def __str__(self)->str:
         return str(self.led)
-     
+
+
+
 class Sockets:
    
     IP_CONECTION = "0.0.0.0"
