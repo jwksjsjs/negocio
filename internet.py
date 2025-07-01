@@ -2,7 +2,7 @@ import network as net
 import ujson
 from erros import ErroWLAN, ConnectionError
 from time import sleep
-
+import uasyncio as asyncro
 #Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
 
 
@@ -35,14 +35,14 @@ class SettingsInternet:
     
     #RESPONSAVEL POR CHAMAR AS DUAS DEFS ACIMA E GERAR UM ERRO CASO NÃO CONSIGA SE
     #CONECTAR A UMA REDE
-    def connect_network(self)->bool:
+    async def connect_network(self)->bool:
         if self.activate_network():
             self.verif_conn()
             try:
                 for _ in range(10):
                     if self.wifi.isconnected():
                         return True    
-                    sleep(1)
+                    await asyncro.sleep(1)
                 raise ConnectionError()
                 
             except ConnectionError as e:
@@ -52,7 +52,7 @@ class SettingsInternet:
     #VERIFICA TODAS AS REDES DISPONÍVEIS AO ENTORNO
     def network_scans_around(self)->list[tuple] | None:
         wifis_scans = self.wifi.scan()
-        return wifis_scans if wifi_scans else None
+        return wifis_scans if wifis_scans else None
 
 
 #======SALVA AS INFORMAÇÕES DO USUÁRIO E AS RETORNA QUANDO NECESSÁRIO======#
@@ -64,7 +64,7 @@ class ManagerWifiInfor:
 
     #GERA UM DICIONÁRIO COM OS DADOS DA REDE
     def data_wifi(self)->dict[str, str]:
-        return {"wifi": self._wifi_name, "password": self._wifi_password}
+        return {"wifi": self._wifiName, "password": self._wifiPassword}
 
     #RETORNA UM JSON ABERTO
     def read_json_wifis(self, file):
@@ -90,7 +90,7 @@ class ManagerWifiInfor:
             return
 
         for savedWifi in jsonOppen:
-            if savedWifi["wifi"] == self._wifi_name:
+            if savedWifi["wifi"] == self._wifiName:
                 return
 
         jsonOppen.append(self.data_wifi())
@@ -127,9 +127,9 @@ class MakerConnection:
         self.w = ManagerWifiInfor(self.internetName, self.password)
 
     #CHAMAS AS FUNCOES QUE PERMITEM ATIVAR O WIFI DO ESP32 E LOGAR NUM REDE
-    def begin_connection(self)->bool:          
+    async def begin_connection(self)->bool:          
         self.internetServer = SettingsInternet(self.internetName, self.password)
-        self.connection = self.internetServer.connect_network()
+        self.connection = await self.internetServer.connect_network()
         
         if self.connection:
             self.w.save_wifi_info()
