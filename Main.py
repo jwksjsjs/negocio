@@ -21,15 +21,18 @@ class Main:
         self.task_sound = None
         self.task_resetPin = None
         self.task_checkInternt = None
-       
+
+    
     def check_task(self, task, exe):
         if task is None:
            return asyncro.create_task(exe())
            
         return task
-   
+
+    
     async def begin_server(self):
         await uasyncio.start_server(self.request_route, self.IP, self.PORT)
+
     
     async def resquests_route(self, reader, writer):
        
@@ -54,6 +57,7 @@ class Main:
                 self.task_sound = self.check_task(self.task_sound, self.checkSound)
                 if "=" in requestPage:
                     dataValue = requestPage.split("=")[1]
+                    
             
     def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
