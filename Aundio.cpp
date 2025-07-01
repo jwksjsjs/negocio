@@ -1,5 +1,6 @@
 #include <Wire.h>
 
+//MODULO QUE PEGA O VOLUME, TRANFORMA EM PORCENTAGEM E ENVIA PRO ADAU
 #define ADAU1701_ADDR 0x34  // endereço exemplo I2C do adau
 #define REG_VOLUME 0x0001   // Endereço exemplo do registrador de volume
 
