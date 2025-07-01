@@ -6,38 +6,55 @@ import uasyncio as asyncro
 #nao sei como tá a identificação já que nao tem tab disponível
 #Classe de intermédio entre o front e o back, tem que ser equeno, vai so chamar as coisas
 class Main:
+
+    PORT = 80
+    IP = "0.0.0.0"
    
     def __init__(self, internetName:str=None, password=None)->None:
         self.internetName = internetName
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
-        self.serverSocket = .....
         self.reset = PinReset()
-        self.ip = "0.0.0.0"
-        self.porta = 80
-        
+
+
+        self.task_grafic = None
+        self.task_sound = None
+        self.task_resetPin = None
+        self.task_checkInternt = None
+       
+    def check_task(self, task, exe):
+        if task is None:
+           return asyncro.create_task(exe())
+           
+        return task
+   
     async def begin_server(self):
-        await uasyncio.start_server(self.request_route, self.ip, self.porta)
-
-    async def resquests_route(self, reader, writer):
-      
-        linha = await reader.readline()
-        requestPage = line.decode().split(" ")[1]
-        if requestPage == "/":
-           selfLog = self.self_login()
-           if not selfLog:
-              run_app()
-           
-           
-
-           pass
-        elif requestPage.startwith("/config"):
-           typeDataValue = requestPage.split("?")[1]
-           if "=" in requestPage:
-              dataValue = requestPage.split("=")[1]
-              #funcao em c++
-            
+        await uasyncio.start_server(self.request_route, self.IP, self.PORT)
     
+    async def resquests_route(self, reader, writer):
+       
+        while True:
+            self.task_resetPin = self.check_task(self.task_resetPin, self.check_resetPin)
+            self.task_checkInternet = self.check_task(self.task_checkInternet, elf.checkInternet)
+           
+            linha = await reader.readline()
+            requestPage = line.decode().split(" ")[1]
+           
+            if requestPage == "/":
+                selfLog = self.self_login()
+                if not selfLog:
+              #setar menssagem falando q nao deu pra se conectar
+                else:
+                    renderTemplates.configPage()
+                    continue                   
+
+            elif requestPage.startwith("/config"):
+                typeDataValue = requestPage.split("?")[1]
+                self.task_grafic = self.check_task(self.task_grafic, self.checkGrafic)
+                self.task_sound = self.check_task(self.task_sound, self.checkSound)
+                if "=" in requestPage:
+                    dataValue = requestPage.split("=")[1]
+            
     def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()...
