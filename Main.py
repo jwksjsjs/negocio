@@ -11,7 +11,7 @@ class Main:
         self.internetName = internetName
         self.password = password
         self.serverToken = MakerConnection(self.internetName, self.password)
-        self.serverSocket = self.serverToken.begin_socket()
+        self.serverSocket = .....
         self.reset = PinReset()
         self.ip = "0.0.0.0"
         self.porta = 80
@@ -24,6 +24,12 @@ class Main:
         linha = await reader.readline()
         requestPage = line.decode().split(" ")[1]
         if requestPage == "/":
+           selfLog = self.self_login()
+           if not selfLog:
+              run_app()
+           
+           
+
            pass
         elif requestPage.startwith("/config"):
            typeDataValue = requestPage.split("?")[1]
@@ -34,7 +40,7 @@ class Main:
     
     def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
-        self.connectedIn = self.serverToken.socket_accept()
+        self.connectedIn = self.serverToken.socket_accept()...
         clientServer = {"Id": self.internetName,
                        "Servidor": self.connectedIn[0]}
         
@@ -47,11 +53,11 @@ class Main:
         return wifis
 
    
-    def config_autoconnection(self, setSelfConn:bool=False)->None:
+    def config_selfconnection(self, setSelfConn:bool=False)->None:
         self.serverToken.is_selfconnection(setSelfConn)
         
     
-    def auto_login(self)->dict | bool:        
+    def self_login(self)->dict | bool:        
         datasToSelfConn = self.serverToken.make_selfconnection()
         if datasToSelfConn:
             self.internetName, self.password = datasToSelfConn[0], datasToSelfConn[1]
