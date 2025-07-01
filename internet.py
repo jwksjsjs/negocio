@@ -5,6 +5,7 @@ from time import sleep
 import uasyncio as asyncro
 #Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
 
+#>>>>>>>>>>>DEIXEM 2 LINHAS ENTRE DEFS E 3 ENTRE CLASSES<<<<<<<<<<<<#
 
 #====================INICIA O WIFI DO ESP32 E=========================#
 #=======TENTA FAZER A CONEXÃO COM A REDE FORNECIDA PELO USUÁRIO=======#
