@@ -17,7 +17,7 @@ class Main:
         self.porta = 80
         
     async def begin_server(self):
-        await uasyncio.start_server(self.tratar, self.ip, self.porta)
+        await uasyncio.start_server(self.request_route, self.ip, self.porta)
 
     async def resquests_route(self, reader, writer):
       
@@ -25,10 +25,12 @@ class Main:
         requestPage = line.decode().split(" ")[1]
         if requestPage == "/":
            pass
-        
-        requestTypeData = line.decode().split("?")[1]
-        requestData = requestTypeData.split("=")[1]
-        return requestPage, requestTypeData, requestData
+        elif requestPage.startwith("/config"):
+           typeDataValue = requestPage.split("?")[1]
+           if "=" in requestPage:
+              dataValue = requestPage.split("=")[1]
+              #funcao em c++
+            
            
       
     
