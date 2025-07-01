@@ -2,7 +2,6 @@ import network as net
 import ujson
 from erros import ErroWLAN, ConnectionError
 from time import sleep
-from definicao_dos_pinos import Sockets
 
 #Esse arquivo tá finalizado eu não vou mexer nisso de novo por nada nesse mundo
 
@@ -33,7 +32,6 @@ class SettingsInternet:
     def verif_conn(self)->None:       
        if not self.wifi.isconnected():
            self.wifi.connect(self._nameNetwork, self._keyNetwork)
-
     
     #RESPONSAVEL POR CHAMAR AS DUAS DEFS ACIMA E GERAR UM ERRO CASO NÃO CONSIGA SE
     #CONECTAR A UMA REDE
@@ -50,7 +48,6 @@ class SettingsInternet:
             except ConnectionError as e:
                 connect_net_error = e.password_error()
                 return connect_net_error
-
 
     #VERIFICA TODAS AS REDES DISPONÍVEIS AO ENTORNO
     def network_scans_around(self)->list[tuple] | None:
@@ -83,8 +80,7 @@ class ManagerWifiInfor:
     def whrite_json_wifis(self, file, data)->None:
         with open(file, 'w') as j:
             ujson.dump(data, j)
-                
-    
+             
     #SALVA AS INFORMAÇÕES DA REDE APÓS TER SIDO POSSÍVEL SE CONETAR COM ELA
     #E CASO A REDE AINDA NÃO ESTEJA SALVA NO ARQUIVO JSON
     def save_wifi_info(self) -> None:
@@ -129,13 +125,7 @@ class MakerConnection:
         #nao acho que crip é necessário 
         self.password = password
         self.w = ManagerWifiInfor(self.internetName, self.password)
-       
-    #ATIVA O SOCKET QUE RECEBE A REQUISIÇÃO HTTP DA WEB
-    def begin_socket(self):       
-        self.server = Sockets()
-        self.socket_ = self.server.config_socket()
-        return self.socket_
-        
+
     #CHAMAS AS FUNCOES QUE PERMITEM ATIVAR O WIFI DO ESP32 E LOGAR NUM REDE
     def begin_connection(self)->bool:          
         self.internetServer = SettingsInternet(self.internetName, self.password)
@@ -173,9 +163,5 @@ class MakerConnection:
     def wifis_scans(self)->list[tuple]:
         justScan = SettingsInternet()
         return justScan.network_scans_around()
-       
-    #CHAMA A FUNÇÃO QUE INFORMA O SOCKET ATIVO E A RETONA
-    def socket_accept(self):
-        return self.server.socket_accept()
         
         
