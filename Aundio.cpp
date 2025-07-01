@@ -1,7 +1,7 @@
 #include <Wire.h>  // I2C
 
-#define ADAU1701_ADDR 0x34  // Endereço I2C do ADAU1701 (ajuste conforme seu hardware)
-#define REG_VOLUME 0x0001   // Endereço do registrador de volume (exemplo)
+#define ADAU1701_ADDR 0x34  // endereço exemplo I2C do adau
+#define REG_VOLUME 0x0001   // Endereço exemplo do registrador de volume
 
 // Converte porcentagem 0 a 100 para 32b
 uint32_t percentToQ5_23(float percent) {
