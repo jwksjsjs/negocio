@@ -31,15 +31,14 @@ class Main:
               dataValue = requestPage.split("=")[1]
               #funcao em c++
             
-           
-      
     
-    """def run_app(self)->dict:
+    def run_app(self)->dict:
         self.serverConnection = self.serverToken.begin_connection()
         self.connectedIn = self.serverToken.socket_accept()
         clientServer = {"Id": self.internetName,
                        "Servidor": self.connectedIn[0]}
-        return clientServer"""
+        
+        return clientServer
        
        
     def wifis_around(self)->list[dict]:
@@ -53,12 +52,12 @@ class Main:
         
     
     def auto_login(self)->dict | bool:        
-        datasToSelfConn= self.serverToken.make_selfconnection()
+        datasToSelfConn = self.serverToken.make_selfconnection()
         if datasToSelfConn:
             self.internetName, self.password = datasToSelfConn[0], datasToSelfConn[1]
             self.serverToken = MakerConnection(self.internetName, self.password)
-            response = self.asyncro_bus()
-            return response
+            self.run_app()
+            return True
 
         return False
        
