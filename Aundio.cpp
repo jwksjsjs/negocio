@@ -5,7 +5,7 @@
 #define REG_VOLUME 0x0001   // Endereço exemplo do registrador de volume
 
 // Converte porcentagem 0 a 100 para 32b
-uint32_t percentToQ5_23(float percent) {
+uint32_t percent_to_Q5_23(float percent) {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
 
@@ -15,7 +15,7 @@ uint32_t percentToQ5_23(float percent) {
 }
 
 // Envia 4 bytes para o adau
-void writeToADAU(uint16_t reg, uint32_t value) {
+void write_to_ADAU(uint16_t reg, uint32_t value) {
     Wire.beginTransmission(ADAU1701_ADDR);
 
     // Enviar endereço de 16 bits
@@ -23,15 +23,14 @@ void writeToADAU(uint16_t reg, uint32_t value) {
     Wire.write(reg & 0xFF);          // byte baixo
 
     // Enviar valor de 32 bits em 4 bytes
-    Wire.write((value >> 24) & 0xFF);
-    Wire.write((value >> 16) & 0xFF);
-    Wire.write((value >> 8) & 0xFF);
-    Wire.write(value & 0xFF);
-
+    for(int i = 24; i > 0; i){
+        Wire.write((value >> i) & 0xFF);
+        i = i-8
+    }
     Wire.endTransmission();
 }
 
-void setVolumePercent(float percent) {
-    uint32_t qValue = percentToQ5_23(percent);
-    writeToADAU(REG_VOLUME, qValue);
+void set_sound(float percent) {
+    uint32_t qValue = percent_to_Q5_23(percent);
+    write_to_ADAU(REG_VOLUME, qValue);
 }
