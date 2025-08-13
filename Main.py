@@ -20,6 +20,10 @@ class Main:
         self.task_resetPin = None
         self.task_checkInternet = None
 
+    #inicia o servidor assincrono
+    async def begin_server(self):
+        await asyncro.start_server(self.requests_route, self.IP, self.PORT)
+
     
     def check_task(self, task, exe):
         if task is None:
@@ -27,14 +31,11 @@ class Main:
         return task
 
     
-    async def begin_server(self):
-        await asyncro.start_server(self.requests_route, self.IP, self.PORT)
-
-    
     async def requests_route(self, reader, writer):
         #Tem que cancelar as funções assincronas quando sair da tela de
         #config ou quando sair da apl
         while True:
+            #fazer check  pin e check  internet
             self.task_resetPin = self.check_task(self.task_resetPin, self.check_resetPin)
             self.task_checkInternet = self.check_task(self.task_checkInternet, self.checkInternet)
             
@@ -53,6 +54,7 @@ class Main:
                     await writer.drain()
 
             elif requestPage.startswith("/config"):
+                #fazer check grafic e check sound
                 self.task_grafic = self.check_task(self.task_grafic, self.check_grafic)
                 self.task_sound = self.check_task(self.task_sound, self.check_sound)
 
@@ -65,7 +67,7 @@ class Main:
     
     def run_app(self) -> dict:
         self.serverConnection = self.serverToken.begin_connection()
-        self.connectedIn = self.serverToken.socket_accept()....
+        self.connectedIn = self.serverToken.socket_accept()
         return {"Id": self.internetName, "Servidor": self.connectedIn[0]}
 
     
@@ -73,7 +75,7 @@ class Main:
         wifisAround = self.serverToken.wifis_scans()
         return [{"Rede": _wifi_[0].decode(), "Potência do sinal": _wifi_[3]} for _wifi_ in wifisAround]
 
-    
+    #define se vai ser autoconectavel, não está sendo usado, precisa colocar na tella de início
     def config_selfconnection(self, setSelfConn: bool = False) -> None:
         self.serverToken.is_selfconnection(setSelfConn)
 
