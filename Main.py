@@ -37,7 +37,7 @@ class Main:
         while True:
             #fazer check  pin e check  internet
             self.task_resetPin = self.check_task(self.task_resetPin, self.check_resetPin)
-            self.task_checkInternet = self.check_task(self.task_checkInternet, self.checkInternet)
+            self.task_checkInternet = self.check_task(self.task_checkInternet, self.serverToken.check_internet)
             
             line = await reader.readline()
             requestPage = line.decode().split(" ")[1]
