@@ -164,5 +164,7 @@ class MakerConnection:
     def wifis_scans(self)->list[tuple]:
         justScan = SettingsInternet()
         return justScan.network_scans_around()
-        
+
+    def check_internet(self)->bool:
+        return self.internetServer.wifi.isconnected()
         
