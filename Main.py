@@ -57,6 +57,7 @@ class Main:
                 #fazer check grafic e check sound
                 self.task_grafic = self.check_task(self.task_grafic, self.check_grafic)
                 self.task_sound = self.check_task(self.task_sound, self.check_sound)
+                #set sound
 
                 if "=" in requestPage:
                     dataValue = requestPage.split("=")[1]
