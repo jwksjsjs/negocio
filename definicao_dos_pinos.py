@@ -2,7 +2,7 @@ import uasyncio as asyncro
 import machine 
 from machine import Pin
                
-#============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES=============#              
+#============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES============#              
 class PinLed:
     
     STATUS_PIN_1 = 2
