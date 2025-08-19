@@ -1,6 +1,6 @@
 
 #Tudo vai ser bem simpleszinho
-#Classe para erros inexperados de tentativa de iniciar o WLAN
+#Classe para erros inexperados de tentativa de iniciar o WLAN 
 class WLAMErroException):
     
     def __init__(self, mensage:str ="Erro inexperado interno, verifique o estado do microcontrolador e o firmwar"):     
