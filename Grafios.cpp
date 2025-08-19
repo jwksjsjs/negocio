@@ -11,7 +11,7 @@
 #include <chrono>
 #include <thread>
 
-// Classe base com configurações gráficas
+// Classe base com configurações gráficas .
 class Grafic {
 protected:
     std::string xName = "Tempo";
