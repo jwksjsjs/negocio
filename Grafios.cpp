@@ -11,24 +11,19 @@
 #include <chrono>
 #include <thread>
 
-// Classe base com configurações gráficas .
 class Grafic {
 protected:
     std::string xName = "Tempo";
     std::string yName = "Frequência";
     std::string graficTitle = "Gráfico de frequência";
-    std::string graficColor = "g";
     std::string graficLabelLine = "Variação da frequência em função do tempo";
 
 public:
     virtual void update() = 0;
     virtual void render() = 0;
-
     virtual ~Grafic() = default;
 };
 
-
-// Classe derivada que desenha e atualiza o gráfico
 class GeneratedGrafic : public Grafic {
 private:
     std::vector<float> x;
@@ -55,34 +50,31 @@ public:
     void render() override {
         if (ImPlot::BeginPlot(graficTitle.c_str())) {
             ImPlot::SetupAxes(xName.c_str(), yName.c_str(), ImPlotAxisFlags_AutoFit, ImPlotAxisFlags_AutoFit);
-            ImPlot::PlotLine(graficLabelLine.c_str(), x.data(), y.data(), x.size());
+            ImPlot::PlotLine(graficLabelLine.c_str(), x.data(), y.data(), (int)x.size());
             ImPlot::EndPlot();
         }
     }
 };
 
-
 int main() {
     if (!glfwInit()) return -1;
 
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Gráfico POO", NULL, NULL);
+    if (!window) return -1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
-    // Inicialização do ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImPlot::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 130");
 
-    // Instância do gráfico
     GeneratedGrafic grafico;
 
-    // Loop principal
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         grafico.update();
@@ -106,7 +98,6 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 
-    // Finalização
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImPlot::DestroyContext();
@@ -115,4 +106,3 @@ int main() {
     glfwTerminate();
     return 0;
 }
-
