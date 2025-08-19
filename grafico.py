@@ -3,8 +3,6 @@ import random
 import matplotlib.pyplot as mp
 import numpy as np
 
-
-#========DEIXEM SEMPRE 2 LINHAS AO FINAL DE FUNÇÕES E 3 LINHAS AO FINAL DE CLASSES PELO AMOR DE DEEEEEUS=========
 #MÓDULO DE REFERNCIA PARA TRADUÇÃO EM C++
 
 
