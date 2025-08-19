@@ -1,7 +1,5 @@
 from internet import MakerConnection
 from defspins import PinReset
-import web
-import grafico  # função em C++
 import uasyncio as asyncro
 
 
@@ -20,80 +18,103 @@ class Main:
         self.task_resetPin = None
         self.task_checkInternet = None
 
-    #inicia o servidor assincrono
+    # inicia o servidor assíncrono
     async def begin_server(self):
         await asyncro.start_server(self.requests_route, self.IP, self.PORT)
 
-    
     def check_task(self, task, exe):
         if task is None:
             return asyncro.create_task(exe())
         return task
 
-    
     async def requests_route(self, reader, writer):
-        #Tem que cancelar as funções assincronas quando sair da tela de
-        #config ou quando sair da apl
         while True:
-            #fazer check  pin e check  internet
+            # checar pino de reset e internet
             self.task_resetPin = self.check_task(self.task_resetPin, self.reset.check_reset)
-            self.task_checkInternet = self.check_task(self.task_checkInternet, self.serverToken.check_internet)
-            
+            self.task_checkInternet = self.check_task(self.task_checkInternet, self._check_internet_task)
+
             line = await reader.readline()
-            requestPage = line.decode().split(" ")[1]
+            if not line:
+                break
+            parts = line.decode().split(" ")
+            if len(parts) < 2:
+                break
+            requestPage = parts[1]
+
+            # consumir cabeçalho até linha em branco
+            while True:
+                hl = await reader.readline()
+                if not hl or hl == b"\r\n":
+                    break
 
             if requestPage == "/":
                 selfLog = self.self_login()
                 if not selfLog:
-                    # enviar mensagem de falha de conexão
                     writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\nFalha ao conectar")
                     await writer.drain()
                 else:
-                    # renderizar página
                     writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\nConectado com sucesso")
                     await writer.drain()
 
             elif requestPage.startswith("/config"):
-                #fazer check grafic e check sound
+                # tarefas auxiliares (stubs)
                 self.task_grafic = self.check_task(self.task_grafic, self.check_grafic)
                 self.task_sound = self.check_task(self.task_sound, self.check_sound)
-                #set sound
 
+                # set sound via query ?value=...
                 if "=" in requestPage:
-                    dataValue = requestPage.split("=")[1]
+                    dataValue = requestPage.split("=", 1)[1]
                     print("Valor de configuração:", dataValue)
 
-            await writer.aclose()
+                writer.write(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\nOK")
+                await writer.drain()
 
-    
+            try:
+                await writer.wait_closed()
+            except AttributeError:
+                # compatibilidade com versões antigas
+                pass
+            break
+
+    async def _check_internet_task(self):
+        while True:
+            _ = self.serverToken.check_internet()
+            await asyncro.sleep(2)
+
     def run_app(self) -> dict:
-        self.serverConnection = self.serverToken.begin_connection()
-        self.connectedIn = self.serverToken.socket_accept()
-        return {"Id": self.internetName, "Servidor": self.connectedIn[0]}
+        # agenda a tentativa de conexão (sem bloquear)
+        asyncro.create_task(self.serverToken.begin_connection())
+        return {"Id": self.internetName or "", "Servidor": True}
 
-    
-    def wifis_around(self) -> list[dict]:
+    def wifis_around(self):
         wifisAround = self.serverToken.wifis_scans()
-        return [{"Rede": _wifi_[0].decode(), "Potência do sinal": _wifi_[3]} for _wifi_ in wifisAround]
+        if not wifisAround:
+            return []
+        return [{"Rede": _wifi_[0].decode() if isinstance(_wifi_[0], bytes) else _wifi_[0],
+                 "Potência do sinal": _wifi_[3]} for _wifi_ in wifisAround]
 
-    #define se vai ser autoconectavel, não está sendo usado, precisa colocar na tella de início
+    # define se vai ser autoconectável (não usado na tela inicial)
     def config_selfconnection(self, setSelfConn: bool = False) -> None:
-        self.serverToken.is_selfconnection(setSelfConn)
+        self.serverToken.define_selfconnection(setSelfConn)
 
-    
     def self_login(self) -> bool:
         datasToSelfConn = self.serverToken.make_selfconnection()
-        if datasToSelfConn:
+        if datasToSelfConn and isinstance(datasToSelfConn, tuple):
             self.internetName, self.password = datasToSelfConn
             self.serverToken = MakerConnection(self.internetName, self.password)
-            self.run_app()
+            # agenda conexão
+            asyncro.create_task(self.serverToken.begin_connection())
             return True
         return False
-        
+
+
+async def _boot():
+    runner = Main()
+    await runner.begin_server()
+
 
 if __name__ == "__main__":
     try:
-        runner = Main()
-        asyncro.run(runner.begin_server())
+        asyncro.run(_boot())
     except Exception as e:
         print('Erro ao iniciar o servidor:', e)
