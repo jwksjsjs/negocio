@@ -1,5 +1,6 @@
 from internet import MakerConnection
 from defspins import PinReset
+from Aundio import soundNull
 import uasyncio as asyncro
 
 
@@ -32,6 +33,11 @@ class Main:
             # checar pino de reset e internet
             self.task_resetPin = self.check_task(self.task_resetPin, self.reset.check_reset)
             self.task_checkInternet = self.check_task(self.task_checkInternet, self._check_internet_task)
+
+            if not self.task_checkInternt:
+                #redireciona para uma pgina html de erro de conexão
+            #if not self.task_resetPin:
+            #faz alguma coisa dependendo da finalidade do pin
 
             line = await reader.readline()
             if not line:
