@@ -3,10 +3,17 @@
 // MODULO QUE PEGA O VOLUME, TRANSFORMA EM PORCENTAGEM E ENVIA PRO ADAU
 #define ADAU1701_ADDR 0x34  // endereço exemplo I2C do adau
 #define REG_VOLUME    0x0001 // Endereço exemplo do registrador de volume
+#define PINO_SOM 34
+#define LIMIAR   500
+
+int soundNull(){
+    int valor = analogRead(PINO_SOM);   // ADC do ESP32
+    return 1 if(valor>LIMIAR) else 0;
+}
 
 // Converte porcentagem 0 a 100 para Q5.23 (32 bits)
 uint32_t percent_to_Q5_23(float percent) {
-    if (percent < 0)   percent = 0;
+    if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     float decimal = percent / 100.0f;
     uint32_t q5_23 = (uint32_t)(decimal * (1u << 23));
