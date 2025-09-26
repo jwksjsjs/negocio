@@ -3,6 +3,12 @@ from defspins import PinReset
 from Aundio import soundNull
 import uasyncio as asyncro
 
+def read_html(args):
+    try:
+        with open(args) as f:
+            return read(f)
+    except:
+        return #RECHARGE
 
 class Main:
     PORT = 80
