@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reconectar à Internet</title>
+<style>
+  body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: #0f1724;
+    color: #e6eef6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .card {
+    background: #0b1220;
+    padding: 30px;
+    border-radius: 12px;
+    width: 350px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+
+  .card h1 {
+    margin-bottom: 10px;
+    font-size: 22px;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+  }
+
+  .indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #ef4444; /* vermelho = offline */
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px 0;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg,#06b6d4,#7c3aed);
+    color: #021026;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .btn:active {
+    transform: translateY(2px);
+  }
+
+  .hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Reconectar à Internet</h1>
+
+    <div class="status">
+      <div class="indicator"></div>
+      <span>Sem conexão</span>
+    </div>
+
+    <button class="btn" type="button">Reconectar</button>
+    
+    <div class="hint">
+      Verifique o roteador ou cabos se o problema persistir.
+    </div>
+  </div>
+
+</body>
+</html>
