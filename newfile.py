@@ -1,5 +1,5 @@
 from erros import ErroWLAN
-#teste
+#teste testoso
 def soma():
     
     if 1+1 == 3:
