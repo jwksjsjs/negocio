@@ -80,7 +80,7 @@ class ManagerWifiInfor:
         with open(file, 'w') as j:
             ujson.dump(data, j)
 
-    # SALVA AS INFORMAÇÕES DA REDE APÓS CONECTAR (SE NÃO EXISTIR)
+    # SALVA AS INFORMAÇÕES DA REDE APÓS CONECTAR (SE NÃO EXISTIR)o
     def save_wifi_info(self) -> None:
         jsonOppen = self.all_wifis()
         if jsonOppen is None:
