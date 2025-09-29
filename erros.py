@@ -6,7 +6,7 @@ class ErroWLAN(Exception):
     def pin_error(self) -> bool:
         print(self.erroMensage)
         return False
-
+//>>>>
 
 class ConnectionError(Exception):
     def __init__(self, mensage: str = "senha incorreta") -> None:
