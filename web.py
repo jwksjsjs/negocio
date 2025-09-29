@@ -11,7 +11,7 @@ import network
 
 
 
-#>>>>>ISSO NÃO VAI USAR FLASK, MAS EU PRECISO DELE PRA RODAR COMO SERVER
+#>>>>>ISSO NÃO VAI eXISTUR MAS EU PRECISO DELE PRA RODAR COMO SERVER
 def get_redes_html():
     redes = main.wifis_scans()
     lista = ''.join([f'<li>{str(red[0], "utf-8")}</li>' for red in redes])
