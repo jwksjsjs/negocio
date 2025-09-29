@@ -3,7 +3,7 @@ import machine
 from machine import Pin
 
 
-#============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES=============#
+#============DEFINE O PINO DE LED E SUAS FUNCIONALIDADES==========8===#
 class PinLed:
 
     STATUS_PIN_1 = 2
