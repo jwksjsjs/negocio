@@ -11,7 +11,7 @@ int soundNull(){
     return 1 if(valor>LIMIAR) else 0;
 }
 
-// Converte porcentagem 0 a 100 para Q5.23 (32 bits)
+// Converte porcentagem 0 a 100 para Q5.23 (32 bits)//
 uint32_t percent_to_Q5_23(float percent) {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
