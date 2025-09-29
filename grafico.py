@@ -9,7 +9,7 @@ import numpy as np
 WAIT_DRAW_NEW_PLOT = 0.05
 
 
-#classe opcional, apenas exibe elementos gráficos
+#classe opcional, apenas exibe elementos gráficos [
 class Grafic:
    
     def __init__(self):      
